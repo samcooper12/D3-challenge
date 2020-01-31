@@ -14,15 +14,26 @@ var svg = d3.select("#scatter")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+
+
+
+
+
 //Read the data
 d3.csv(url, function(d) {
 
   console.log(d)
+
+
+
+
   var xValue = function(d) { return d['healthcare']}, // data -> value
     xScale = d3.scaleLinear().range([0, width]), // value -> display
     xMap = function(d) { return xScale(xValue(d));}, // data -> display
     // xAxis = d3.svg.axis().scale(xScale).orient("bottom");
     xAxis = d3.axisBottom(xScale)
+
+
 
 // setup y
 var yValue = function(d) { return d["poverty"];}, // data -> value
@@ -45,13 +56,9 @@ var yValue = function(d) { return d["poverty"];}, // data -> value
   svg.append("g")
     .call(d3.axisLeft(y));
 
-    //scale
-
-  // x.domain(d3.extent(data['povertyMoe, function(d) { return d.povertyMoe; }));
-  // y.domain([0, d3.max(data, function(d) { return d.SalePrice; })]);
 
   // Add dots
-svg.append('g')
+var circles = svg.append('g')
     .selectAll("dot")
     .data(d)
     .enter().append("circle")
@@ -68,9 +75,13 @@ svg.append('g')
         // .attr("x", 10)
         // .text(d.abbr));
         .text(d => d.abbr))
-        // .moveToFront(text);
-        // .fillText(d => d.abbr));
-      // .fillText(d.abbr)
+        
+
+
+  var text = svg.selectAll("text")
+    .data(circles)
+    .enter()
+    .append("text");
 
 // var text = svg.selectAll("text")
 //               .data(d)
@@ -79,15 +90,11 @@ svg.append('g')
 
               // .textfill(d.abbr)
               // .append("text");
-
-//Add SVG Text Element Attributes
- // var textLabels = text
- //               .attr("cx", function(d) { return x(d.poverty); })
- //           .attr("cy", function(d) { return y(d.healthcare); })
- //              .text( function (d) { return d.abbr })
- //            .attr("font-family", "sans-serif")
- //              .attr("font-size", "20px")
- //               .attr("fill", "red");
-
-
+var textLabels = text
+                .attr("x", function(d) { return d.cx; })
+                .attr("y", function(d) { return d.cy; })
+                .text( function (d) { return "( " + d.cx + ", " + d.cy +" )"; })
+               .attr("font-family", "sans-serif")
+                 .attr("font-size", "20px")
+                 .attr("fill", "red");
 })

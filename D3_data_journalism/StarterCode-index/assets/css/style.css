@@ -35,7 +35,8 @@ body {
 }
 
 text {
-  color:black;
+  /*color:black;*/
+  color: white;
   /*z-index: 1;*/
 }
 
@@ -51,7 +52,8 @@ text {
 
 circle {
     /*fill: steelblue;*/
-    fill: none;
-    color: black; 
-    
+    /*fill: none;*/
+/*    background-color: black;
+    color: black;*/ 
+
 }
