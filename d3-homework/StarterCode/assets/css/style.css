@@ -8,10 +8,17 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+/*.container {
+  background-color: rgb(200,1,1,.5);
+}*/
 body {
   /* Padding bottom by footer height */
   padding-bottom: 80px;
+}
+
+text {
+  text-align: center;
+  display: inline;
 }
 
 #footer {

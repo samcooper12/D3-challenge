@@ -44,14 +44,14 @@ var url = 'assets/data/data.csv'
 console.log(url)
 // load data
 // d3.csv("cereal.csv", function(error, data) {
-d3.csv(url, function(error, data) {
+d3.csv(url, function(data) {
 
   // change string (from CSV) into number format
-//   data.forEach(function(d) {
-//     d.Calories = +d.Calories;
-//     d["Protein (g)"] = +d["Protein (g)"];
-// //    console.log(d);
-//   });
+  data.forEach(function(d) {
+    d.Calories = +d.Calories;
+    d["Protein (g)"] = +d["Protein (g)"];
+//    console.log(d);
+  });
 
   // don't want dots overlapping axis, so add in buffer to data domain
   xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
@@ -83,8 +83,10 @@ d3.csv(url, function(error, data) {
 
   // draw dots
   svg.selectAll(".dot")
-      .data(data)
-    .enter().append("circle")
+      // .data(data)
+    .enter()
+    // .data(data)
+    .append("circle")
       .attr("class", "dot")
       .attr("r", 3.5)
       .attr("cx", xMap)
