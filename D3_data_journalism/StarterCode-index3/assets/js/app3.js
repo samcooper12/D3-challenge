@@ -53,11 +53,18 @@ var states = []
 
 //   return states
 // })
+function init(d){
 
+        for(i=0; i < d.length; i++){
+          var idk=d[i]['abbr']
+        console.log(idk)
+       }
+     }
 
 
 d3.csv(url, function(d) {
 
+init(d)
 console.log(d3)
   //                      g , svg  , 
   // setup x
@@ -134,7 +141,13 @@ svg.selectAll("text")
        .text(d => d.abbr) 
 
 
+       // for(i=0;i < d.lengtht; i++){
+       //  console.log(d[i][abbr])
+       // }
 
+var test = svg.selectAll("text")
+console.log(test)
+       console.log(svg.node())
     return svg.node()
 })
 console.log(svg.node())
