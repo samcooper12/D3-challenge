@@ -9,7 +9,11 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+/*
+.tick {
+  padding-right: 10px;
+}
+*/
 body {
   font-size: 16px;
   /* Padding bottom by footer height */

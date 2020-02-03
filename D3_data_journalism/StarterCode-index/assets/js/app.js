@@ -26,10 +26,13 @@ function values(d, col) {
   // poverty = toString(poverty)
   for (i = 0; i < d.length; i++) {
     var p = d[i][col]
-    p = parseInt(p)
+    // console.log(p)
+    p = parseFloat(p,)
+    // console.log(p)
     list.push(p)
   }
   return list
+  // console.log(list)
 }
 
 // USING VALUES() ^^  TO CREATE VALUE LISTS
@@ -37,9 +40,11 @@ function values(d, col) {
 var povertyVals = values(d, "poverty")
 var healthVals = values(d, "healthcare")
 
-var maxX = [d3.min(povertyVals),d3.max(healthVals)]
-var maxY = [d3.min(healthVals), d3.max(healthVals)]
+var maxX = [Math.floor(d3.min(povertyVals)) -1,Math.ceil(d3.max(healthVals) +1)]
+var maxY = [Math.floor(d3.min(healthVals)) -1, Math.ceil(d3.max(healthVals) +1)]
 
+console.log(maxX)
+console.log(maxY)
 /*SCALING FUNCTIONS ---------
       DOMAIN 
       RANGE*/
@@ -63,6 +68,7 @@ svg.append("g")
     .attr("fill","blackx")
     .style("stroke-width", 3)
     .style("font-size","19px")
+    // .attr("width","50px")
     // .attr()
 
     .call(d3.axisLeft(scaleY));
