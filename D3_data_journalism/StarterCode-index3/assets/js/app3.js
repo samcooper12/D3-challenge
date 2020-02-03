@@ -1,8 +1,4 @@
-// var log = console.log.bind(console)
-// var log = console.log.bind(console)
-
 var url = 'assets/data/data.csv'
-
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -17,56 +13,15 @@ var svg = d3.select("#scatter").append("svg")
   //   .attr("transform",
   //         "translate(" + margin.left + "," + margin.top + ")");
 
-// var g = svg.append("g").attr("transform")
+
 var states = []
 
-// function getStates(d,states){ 
-  // var states = []
-// states =[]
-// var getStates = d3.csv(url, function(d){
-
-        // for (i=0; i < d.length; i++) {
-        //   var eachState = d[i]['abbr']
-        // console.log(eachState)
-        //   states.push(eachState)
-
-        // return states
-          // console.log(states)
-        
-      // }
-      // console.log(states)
-  // console.log('~~~~~~~~~~~~~~~END OF GETSTATES~~~~~~~~~~~~~~~~~~~~~~')
-//   // return states
-//   })
-
-// // getStates(url,states)
-// // console.log('states')
-// console.log(states)
-
-// var namesGet = d3.csv(url, function(d){
-
-
-
-//   getStates(d,states)
-
-//   console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-
-//   return states
-// })
-function init(d){
-
-        for(i=0; i < d.length; i++){
-          var idk=d[i]['abbr']
-        console.log(idk)
-       }
-     }
-
+// D3
 
 d3.csv(url, function(d) {
 
-init(d)
-console.log(d3)
-  //                      g , svg  , 
+
+
   // setup x
   var xValue = function(d) { return d['healthcare']}, // data -> value
       xScale = d3.scaleLinear().range([0, width]), // value -> display
@@ -107,8 +62,6 @@ console.log(d3)
         // .fill("none")
         .attr("fill","none")
         .attr("stroke", "steelblue")
-        // .attr("background-color","blue")
-        // .attr("border-color","blue")
           .attr("cx", function (d) { return x(d.poverty); } )
           .attr("cy", function (d) { return y(d.healthcare); } )
           .attr("r", 20)
@@ -120,10 +73,11 @@ svg.selectAll("text")
     .enter()
     .append("text")
 // svg.selectAll("text")
-       .data(d)
-       .enter()
+       // .data(d)
+       // .enter()
        .append("text")
-
+       .attr("fill","white")
+       .attr("font-style","strong")
        // .attr("x","50%")
        
        // .attr("x",function (d) { return xScale(d.poverty) } )

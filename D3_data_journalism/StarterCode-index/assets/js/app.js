@@ -1,102 +1,217 @@
-// @TODO: YOUR CODE HERE!
+
 var url = 'assets/data/data.csv'
 
+var states = []
 
-var svgWidth = 960;
-var svgHeight = 500;
+var svg
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+d3.csv(url, function(d) {
 
-var x = d3.scaleTime().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
+      // SET DIMENSIONS FOR SVG 
 
-var svg = d3.select("body").append("svg")
+var margin = {top: 15, right: 10, bottom: 40, left: 60},
+    width = 900 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+var svg = d3.select("#scatter").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-	.append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	// x.domain(d3.extent(data, function(d) { return d.date; }));
-	// y.domain([0, d3.max(data, function(d) { return d.close; })]);
-var data
-// console.log(url)
-// load data
-// d3.csv("cereal.csv", function(error, data) {
 
 
-	// define the line
-var valueline = d3.line()
-    .x(function(d) { return x(d.povertyMoe); })
-    .y(function(d) { return y(d.SalePrice); });
+// CREATE A LIST OF COL VALUES
+
+
+function values(d, col) { 
+  var list = []
+  // poverty = toString(poverty)
+  for (i = 0; i < d.length; i++) {
+    var p = d[i][col]
+    p = parseInt(p)
+    list.push(p)
+  }
+  return list
+}
+
+// USING VALUES() ^^  TO CREATE VALUE LISTS
+
+var povertyVals = values(d, "poverty")
+var healthVals = values(d, "healthcare")
+
+var maxX = [d3.min(povertyVals),d3.max(healthVals)]
+var maxY = [d3.min(healthVals), d3.max(healthVals)]
+
+/*SCALING FUNCTIONS ---------
+      DOMAIN 
+      RANGE*/
+
+var scaleX = d3.scaleLinear()
+          .domain(maxX)
+          .range([0, width]);
+
+var scaleY = d3.scaleLinear()
+          .domain(maxY)
+          .range([height, 0]) 
+
+/*
+ADDS AXIS -- SCALEX, SCALE Y
+
+  X AXIS
+*/
+
+svg.append("g")
+    .attr("transform", "translate(0" + [margin.left, 0] + ")")
+    .attr("fill","blackx")
+    .style("stroke-width", 3)
+    .style("font-size","19px")
+    // .attr()
+
+    .call(d3.axisLeft(scaleY));
+
+
+/*
+  Y AXIS
+*/  
+
+svg.append("g")
+    .attr("class","xAxis")
+    .attr("transform", "translate(0," + height  + ")")
+    .attr("fill","black")
+    .style("stroke-width", 3)
+    .style("font-size","19px")
+    .call(d3.axisBottom(scaleX))
 
 
 
-var circles = svg.selectAll("circle")
-// var circles = svgContainer.selectAll("circle")
-	.data(jsonCircles)
-	.enter()
-	.append("circle");
+        // Add Y axis
+        // var y = d3.scaleLinear()
+          // .domain([5, 27])
+          // .domain([minHealthcare, maxHealthcare])
+          // .range([ height, 0]);
 
-d3.csv('assets/data/data.csv', function(error, data) {
-
-// 	data.forEach(function(d) {
-// 		print(d)
-//     	// d.age = +d.age;
-//     	var pov = {}
-//     	var add = d
-//     	pov.push(add, )
-//     	var lack_healthcare = {}
-//     	// d.smokes = +d.smokes;
-// //    console.log(d);
-//   });
-
-	var poverty = data['poverty']
-	var healthcare = data['healthcare']
-	console.log(poverty)
-	console.log(healthcare)
-
-	var x = d3.scaleLinear()
-    .domain([0, 4000])
-    .range([ 0, width ]);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-
-     var y = d3.scaleLinear()
-    .domain([0, 500000])
-    .range([ height, 0]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
-// Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.povertyMoe; }));
-  y.domain([0, d3.max(data, function(d) { return d.SalePrice; })]);
-
-  // Add the valueline path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", valueline);``
-
-  // Add the X Axis
-  svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-  // Add the Y Axis
-  svg.append("g")
-      .call(d3.axisLeft(y));
+// var scaleY = d3.scaleLinear()
+//           .domain([minHealthcare, maxHealthcare])
+//           .range([height, 0]) 
+//         svg.append("g")
+//             // .attr("transform", "translate(0" + [margin.left, 0] + ")")
+//             // .text("healthcare")
+//             .attr("fill","blackx")
+            // .call(d3.axisLeft(y));
 
 
-	svg.append('g')
-    .selectAll("dot")
-    .data(data)
+/*
+add circles to 
+*/
+    svg
+        .selectAll("circle")
+        .data(d)
+        .enter()
+        .append("circle")
+        // .attr("fill","rgb(139,188, 214)")
+        .style("fill","rgb(139,188, 214)" )
+        // .attr("stroke", "rgb(139,188, 214)")
+        .attr("id","")
+          .attr("cx", function (d) { return scaleX(d.poverty); } ) // scale circles to fit x 
+          .attr("cy", function (d) { return scaleY(d.healthcare); } ) // scale circles to fit y
+          .attr("r", 16)
+          .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+        // .text()
+        // .on("mouseover", handleMouseOver)
+        // .on("mouseout", handleMouseOut);
+
+
+/*
+STATE ABBR 
+*/
+
+svg.selectAll("text")
+    // .data(d)
     .enter()
-    .append("circle")
-      .attr("cx", function (d) { return x(d.povertyMoe); } )
-      .attr("cy", function (d) { return y(d.SalePrice); } )
-      .attr("r", 1.5)
-      .style("fill", "#69b3a2")
+    .append("text")
+       .data(d)
+       .enter()
+       .append("text")
+       .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+       .attr("fill","white")
+       .attr("stroke","white")
+       // .attr("x",function (d) { return xScale(d.poverty) } )
+       .attr("x",function (d) { return scaleX(d.poverty) } )
+       // .attr("y",function (d) { return yScale(d.healthcare) } )
+       .attr("y",function (d) { return scaleY(d.healthcare) } )
 
-});
+       .attr("dominant-baseline","central" )
+       .attr("font-size","14px" )
+       // .attr("dominant-baseline","middle" )
+       .text(d => d.abbr) 
+
+/*
+X axis text
+*/
+
+svg.append("text")
+      .style("font-size","16px")
+       .attr("dy", "1em")
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("In Poverty (%)");  
+
+
+
+
+/*
+Y  text
+*/
+
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 10)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      // .attr("transform",
+      //       "translate(" + (width/2) + " ," + 
+      //                      (height + margin.top + 20) + ")")
+      // .style("text-anchor", "middle")
+      .text("Lacks Healthcare (%)")
+      .attr("fill","black");
+})
+
+
+
+/*
+function handleMouseOver(d, i) {  
+
+            // Use D3 to select element, change color and size
+            d3.select(this).attr({
+              fill: "orange",
+              r: 22
+            });
+
+            svg.selectAll("text")
+            .enter()
+            .append("text")
+            .enter()
+            .attr("id", ("t" + d.poverty + "-" + d.healthcare + "-" + i))
+               // "id": "t" + d.poverty + "-" + d.healthcare + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
+            //     x: function() { return xScale(d.poverty) - 30; },
+            //     y: function() { return yScale(d.healthcare) - 15; }
+            // })
+            // .attr('fill','red')
+            .attr("x",function() { return xScale(d.poverty) - 30; })
+            .attr("y",function() { return yScale(d.healthcare) - 15; })
+            .text(function() {
+              return [d.poverty, d.healthcare];  // Value of the text
+            });
+          }
+
+function handleMouseOut(d, i) {
+            // Use D3 to select element, change color back to normal
+            d3.select(this).attr({
+              fill: "rgb(139,188, 214)",
+              stroke: "rgb(139,188, 214)",
+              r: 20
+            });
+            d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
+}
+*/
+
