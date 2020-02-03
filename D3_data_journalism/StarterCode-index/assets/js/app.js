@@ -11,7 +11,7 @@ d3.csv(url, function(d) {
 
 var margin = {top: 15, right: 10, bottom: 40, left: 60},
     width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 700 - margin.top - margin.bottom;
 
 var svg = d3.select("#scatter").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -40,8 +40,8 @@ function values(d, col) {
 var povertyVals = values(d, "poverty")
 var healthVals = values(d, "healthcare")
 
-var maxX = [Math.floor(d3.min(povertyVals)) -1,Math.ceil(d3.max(healthVals) +1)]
-var maxY = [Math.floor(d3.min(healthVals)) -1, Math.ceil(d3.max(healthVals) +1)]
+var maxX = [Math.floor(d3.min(povertyVals)) -.5,Math.ceil(d3.max(healthVals) +1)]
+var maxY = [Math.floor(d3.min(healthVals)) -.5, Math.ceil(d3.max(healthVals) +1)]
 
 console.log(maxX)
 console.log(maxY)
@@ -51,31 +51,35 @@ console.log(maxY)
 
 var scaleX = d3.scaleLinear()
           .domain(maxX)
-          .range([0, width]);
+          // .range([0, width]);
+          .range([margin.left + margin.right, width]);
 
 var scaleY = d3.scaleLinear()
           .domain(maxY)
-          .range([height, 0]) 
+          .range([height, margin.top + margin.bottom]) 
 
 /*
 ADDS AXIS -- SCALEX, SCALE Y
 
-  X AXIS
+  Y AXIS
 */
 
 svg.append("g")
-    .attr("transform", "translate(0" + [margin.left, 0] + ")")
+    .attr("transform", "translate(0" + [margin.left + margin.right, 0] + ")")
     .attr("fill","blackx")
+
     .style("stroke-width", 3)
-    .style("font-size","19px")
+    .style("font-size","16px")
     // .attr("width","50px")
     // .attr()
 
-    .call(d3.axisLeft(scaleY));
+    .call(d3.axisLeft(scaleY))
+    .call(g => g.selectAll(".tick text")
+      .attr("x", -20))
 
 
 /*
-  Y AXIS
+  X AXIS
 */  
 
 svg.append("g")
@@ -83,9 +87,12 @@ svg.append("g")
     .attr("transform", "translate(0," + height  + ")")
     .attr("fill","black")
     .style("stroke-width", 3)
-    .style("font-size","19px")
+    .style("font-size","16px")
     .call(d3.axisBottom(scaleX))
-
+    // .tickSize(width - margin.left - margin.right)
+    // .call(g => g.selectAll(".tick text")
+        // .attr("x", 10)
+        // .attr("dy", margin.bottom ))
 
 
         // Add Y axis
@@ -170,18 +177,23 @@ Y  text
 */
 
   svg.append("text")
+      .style("font-size","16px")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 10)
+      .attr("y", 0 - margin.left + 60)
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       // .attr("transform",
       //       "translate(" + (width/2) + " ," + 
       //                      (height + margin.top + 20) + ")")
       // .style("text-anchor", "middle")
-      .text("Lacks Healthcare (%)")
-      .attr("fill","black");
+      .text("Lacks Health Care (%)")
+      .style("fill","black");
 })
 
+
+
+// svg.selectAll("tick")
+//   .attr("transform", "translate(0" + [-20, 0] + ")")
 
 
 /*
